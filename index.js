@@ -2,9 +2,17 @@ const inquirer = require('inquirer');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
 const Manager = require('./lib/Manager');
+const generateProfile = require('./src/page-template');
+const writeFile = require('./utils/generate-site');
 
 // begin user prompt for manager info
-const promptManager = () => {
+const promptManager = profileData => {
+    // if there is no employee array create one
+    console.log(profileData);
+    if (!profileData.employees) {
+        profileData.employees = [];
+    }
+
     console.log(`
     =======================
     Team Profile Generator!
@@ -36,9 +44,9 @@ const promptManager = () => {
         // destructure info from prompt
         .then(({ name, id, email, officeNumber }) => {
             const manager = new Manager(name, id, email, officeNumber);
-            
             console.log(manager);
-            promptNextOrFinish();
+            // profileData.employees.push(manager);
+            // promptNextOrFinish();
         });
 };
 
@@ -53,13 +61,11 @@ function promptNextOrFinish() {
         .then(answer => {
             console.log(answer);
             if (answer.nextOrFinish === 'Engineer') {
-                console.log('blah blah');
                 promptEngineer();
             } else if (answer.nextOrFinish === 'Intern') {
-                console.log('yada yada');
                 promptIntern();
             } else {
-                console.log('hoody hoo')
+                return profileData;
             }
         })
 }
@@ -92,6 +98,7 @@ function promptEngineer() {
             const engineer = new Engineer(name, email, id, github);
 
             console.log(engineer);
+            // profileData.employees.push(engineer);
             promptNextOrFinish();
         })
 }
@@ -128,4 +135,22 @@ function promptIntern() {
     })
 }
 
-promptManager();
+
+
+promptManager()
+.then(promptNextOrFinish)
+.then(profileData => {
+    return generateProfile(profileData);
+})
+.then(pageHTML => {
+    return writeFile(pageHTML);
+})
+.then(writeFileResponse => {
+    console.log(writeFileResponse);
+})
+.catch(err => {
+    console.log(err);
+});
+
+
+

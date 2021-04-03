@@ -10,7 +10,7 @@ const writeFile = fileContent => {
                 return;
             }
 
-            // if everything went well, resolve the promis and send the successful data to the .then method
+            // if everything went well, resolve the promise and send the successful data to the .then method
             resolve({
                 ok: true,
                 message: "File created!"
@@ -18,3 +18,5 @@ const writeFile = fileContent => {
         });
     });
 };
+
+module.exports = writeFile;
