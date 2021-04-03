@@ -1,5 +1,6 @@
 const inquirer = require('inquirer');
 const Engineer = require('./lib/Engineer');
+const Intern = require('./lib/Intern');
 const Manager = require('./lib/Manager');
 
 // begin user prompt for manager info
@@ -56,6 +57,7 @@ function promptNextOrFinish() {
                 promptEngineer();
             } else if (answer.nextOrFinish === 'Intern') {
                 console.log('yada yada');
+                promptIntern();
             } else {
                 console.log('hoody hoo')
             }
@@ -92,6 +94,38 @@ function promptEngineer() {
             console.log(engineer);
             promptNextOrFinish();
         })
+}
+
+function promptIntern() {
+    return inquirer
+    .prompt([
+        {
+            type: 'text',
+            name: 'name',
+            message: "Please enter the intern's name."
+        },
+        {
+            type: 'text',
+            name: 'id',
+            message: "Please enter the intern's employee id number."
+        },
+        {
+            type: 'text',
+            name: 'email',
+            message: "Please enter the intern's email address."
+        },
+        {
+            type: 'text',
+            name: 'school',
+            message: "Please enter the intern's school."
+        }
+    ])
+    .then(({ name, id, email, school }) => {
+        const intern = new Intern(name, email, id, school);
+
+        console.log(intern);
+        promptNextOrFinish();
+    })
 }
 
 promptManager();
