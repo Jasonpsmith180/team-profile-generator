@@ -30,7 +30,7 @@ const promptUser = () => {
             const employee = new Employee(name, id, email);
             
             console.log(employee);
-        })
-}
+        });
+};
 
 promptUser();
