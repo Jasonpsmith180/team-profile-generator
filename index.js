@@ -1,7 +1,9 @@
 const inquirer = require('inquirer');
+const Engineer = require('./lib/Engineer');
 const Manager = require('./lib/Manager');
 
-const promptUser = () => {
+// begin user prompt for manager info
+const promptManager = () => {
     console.log(`
     =======================
     Team Profile Generator!
@@ -30,12 +32,66 @@ const promptUser = () => {
                 message: "Please enter the team manager's office number"
             }
         ])
-        // destructure name from prompt
+        // destructure info from prompt
         .then(({ name, id, email, officeNumber }) => {
             const manager = new Manager(name, id, email, officeNumber);
             
             console.log(manager);
+            promptNextOrFinish();
         });
 };
 
-promptUser();
+function promptNextOrFinish() {
+    return inquirer
+        .prompt({
+            type: 'list',
+            name: 'nextOrFinish',
+            message: 'Would you like to enter an engineer or intern? Or finish the profile?',
+            choices: ['Engineer', 'Intern', 'Finish Profile']
+        })
+        .then(answer => {
+            console.log(answer);
+            if (answer.nextOrFinish === 'Engineer') {
+                console.log('blah blah');
+                promptEngineer();
+            } else if (answer.nextOrFinish === 'Intern') {
+                console.log('yada yada');
+            } else {
+                console.log('hoody hoo')
+            }
+        })
+}
+
+function promptEngineer() {
+    return inquirer
+        .prompt([
+            {
+                type: 'text',
+                name: 'name',
+                message: "Please enter the engineer's name."
+            },
+            {
+                type: 'text',
+                name: 'id',
+                message: "Please enter the engineer's employee id number."
+            },
+            {
+                type: 'text',
+                name: 'email',
+                message: "Please enter the engineer's email address."
+            },
+            {
+                type: 'text',
+                name: 'github',
+                message: "Please enter the engineer's github account."
+            }
+        ])
+        .then(({ name, id, email, github }) => {
+            const engineer = new Engineer(name, email, id, github);
+
+            console.log(engineer);
+            promptNextOrFinish();
+        })
+}
+
+promptManager();
