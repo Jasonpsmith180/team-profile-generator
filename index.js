@@ -1,5 +1,5 @@
 const inquirer = require('inquirer');
-const Employee = require('./lib/Employee');
+const Manager = require('./lib/Manager');
 
 const promptUser = () => {
     console.log(`
@@ -23,13 +23,18 @@ const promptUser = () => {
                 type: 'text',
                 name: 'email',
                 message: "Please enter the team manager's email address."
+            },
+            {
+                type: 'text',
+                name: 'officeNumber',
+                message: "Please enter the team manager's office number"
             }
         ])
         // destructure name from prompt
-        .then(({ name, id, email }) => {
-            const employee = new Employee(name, id, email);
+        .then(({ name, id, email, officeNumber }) => {
+            const manager = new Manager(name, id, email, officeNumber);
             
-            console.log(employee);
+            console.log(manager);
         });
 };
 
