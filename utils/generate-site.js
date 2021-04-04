@@ -13,7 +13,7 @@ const writeFile = fileContent => {
             // if everything went well, resolve the promise and send the successful data to the .then method
             resolve({
                 ok: true,
-                message: "File created!"
+                message: "File created! See the dist directory for your HTML file!"
             });
         });
     });

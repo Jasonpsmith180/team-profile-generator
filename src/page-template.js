@@ -1,5 +1,6 @@
 const Employee = require("../lib/Employee");
 
+// Generates cards for each employee based on the array length and employee roles
 const generateCards = employeeArr => {
     var result = ''
     for (var i = 0; i < employeeArr.length; i++) {
@@ -10,7 +11,7 @@ const generateCards = employeeArr => {
                     <h4 class="card-title">${employeeArr[i].name}</h4>
                     <h5 class="card-subtitle mb-2 text-muted">${employeeArr[i].role}  <i class="fas fa-clipboard-list"></i></h5>
                     <h6 class="card-subtitle mt-2 mb-2 text-muted">Employee ID: ${employeeArr[i].id}</h6>
-                    <p class="card-text mb-2">Office #: ${employeeArr[i].officeNumber}</p>
+                    <p class="card-text mb-2">Office Number: ${employeeArr[i].officeNumber}</p>
                     <a href="mailto:${employeeArr[i].email}" class="card-link mb-2">Email</a>
                 </div>
             </div>  
@@ -47,14 +48,15 @@ const generateCards = employeeArr => {
     return result;
 }
 
-// 
-
 module.exports = templateData => {
 
+// Parse template data to return employees array
 templateData = JSON.parse(templateData);
 
+// destructure employees array
 const {employees} = templateData;
 
+// HTML template
 return `
     <!DOCTYPE html>
     <html lang="en">

@@ -135,6 +135,7 @@ function promptIntern() {
     })
 }
 
+// start program
 promptManager()
 .then(promptNextOrFinish)
 .then(profileData => {
