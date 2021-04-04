@@ -4,11 +4,11 @@ const Intern = require('./lib/Intern');
 const Manager = require('./lib/Manager');
 const generateProfile = require('./src/page-template');
 const writeFile = require('./utils/generate-site');
+var profileData = {};
 
 // begin user prompt for manager info
-const promptManager = profileData => {
+const promptManager = () => {
     // if there is no employee array create one
-    console.log(profileData);
     if (!profileData.employees) {
         profileData.employees = [];
     }
@@ -44,12 +44,12 @@ const promptManager = profileData => {
         // destructure info from prompt
         .then(({ name, id, email, officeNumber }) => {
             const manager = new Manager(name, id, email, officeNumber);
-            console.log(manager);
-            // profileData.employees.push(manager);
-            // promptNextOrFinish();
+
+            profileData.employees.push(manager);
         });
 };
 
+// Run prompt to see if the user wants to add an engineer/intern or finish the profile
 function promptNextOrFinish() {
     return inquirer
         .prompt({
@@ -59,17 +59,17 @@ function promptNextOrFinish() {
             choices: ['Engineer', 'Intern', 'Finish Profile']
         })
         .then(answer => {
-            console.log(answer);
             if (answer.nextOrFinish === 'Engineer') {
-                promptEngineer();
+                return promptEngineer();
             } else if (answer.nextOrFinish === 'Intern') {
-                promptIntern();
+                return promptIntern();
             } else {
                 return profileData;
             }
         })
 }
 
+// question prompts for engineer
 function promptEngineer() {
     return inquirer
         .prompt([
@@ -95,14 +95,14 @@ function promptEngineer() {
             }
         ])
         .then(({ name, id, email, github }) => {
-            const engineer = new Engineer(name, email, id, github);
+            const engineer = new Engineer(name, id, email, github);
+            profileData.employees.push(engineer);
 
-            console.log(engineer);
-            // profileData.employees.push(engineer);
-            promptNextOrFinish();
+            return promptNextOrFinish();
         })
 }
 
+// question prompts for intern
 function promptIntern() {
     return inquirer
     .prompt([
@@ -128,19 +128,17 @@ function promptIntern() {
         }
     ])
     .then(({ name, id, email, school }) => {
-        const intern = new Intern(name, email, id, school);
+        const intern = new Intern(name, id, email, school);
 
-        console.log(intern);
-        promptNextOrFinish();
+        profileData.employees.push(intern);
+        return promptNextOrFinish();
     })
 }
-
-
 
 promptManager()
 .then(promptNextOrFinish)
 .then(profileData => {
-    return generateProfile(profileData);
+    return generateProfile(JSON.stringify(profileData));
 })
 .then(pageHTML => {
     return writeFile(pageHTML);
